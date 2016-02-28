@@ -95,12 +95,12 @@ public class MainController {
         artistListView.setItems(getAlbumObservableList(null));
     }
 
-    private ArrayList<File> getLocalAlbums() {
+    private List<File> getLocalAlbums() {
         Collection<File> files =
-                FileUtils.listFilesAndDirs(new File(AppProperties.getProperty("local.music.basedir")),
+                FileUtils.listFilesAndDirs(new File(System.getenv("MUSIC_HOME")),
                         DirectoryFileFilter.DIRECTORY,
                         TrueFileFilter.INSTANCE);
-        ArrayList<File> fileList = new ArrayList<>();
+        List<File> fileList = new ArrayList<>();
         fileList.addAll(files);
         fileList.remove(0);
         return fileList;

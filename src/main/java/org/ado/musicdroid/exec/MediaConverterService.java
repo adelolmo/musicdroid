@@ -22,7 +22,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.ado.musicdroid.AppConstants.*;
+import static org.ado.musicdroid.AppConstants.ANDROID_MUSIC_BASE_DIRECTORY;
+import static org.ado.musicdroid.AppConstants.EXPORT_DIRECTORY;
 import static org.apache.commons.lang3.Validate.notNull;
 
 /**
@@ -91,7 +92,7 @@ public class MediaConverterService extends Service<Void> {
             }
 
             private String getAlbumRelativePath(File songFile) {
-                String s = songFile.getAbsolutePath().substring(LOCAL_MUSIC_BASE_DIRECTORY.length());
+                String s = songFile.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length());
                 return s.substring(0, s.lastIndexOf("/") + 1);
             }
 
@@ -117,7 +118,7 @@ public class MediaConverterService extends Service<Void> {
             }
 
             private String getExportDirectory(File songFile) {
-                File exportFile = new File(EXPORT_DIRECTORY, songFile.getAbsolutePath().substring(LOCAL_MUSIC_BASE_DIRECTORY.length()));
+                File exportFile = new File(EXPORT_DIRECTORY, songFile.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length()));
                 File exportDirectory = new File(FilenameUtils.getFullPath(exportFile.getAbsolutePath()));
                 if (!exportDirectory.exists()) {
                     try {
@@ -130,7 +131,7 @@ public class MediaConverterService extends Service<Void> {
             }
 
             private String getRemoteLocation(File file) {
-                return ANDROID_MUSIC_BASE_DIRECTORY + file.getAbsolutePath().substring(LOCAL_MUSIC_BASE_DIRECTORY.length());
+                return ANDROID_MUSIC_BASE_DIRECTORY + file.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length());
             }
         };
     }

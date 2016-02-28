@@ -2,8 +2,6 @@ package org.ado.musicdroid;
 
 import java.io.File;
 
-import static org.ado.musicdroid.AppConstants.LOCAL_MUSIC_BASE_DIRECTORY;
-
 /**
  * Class description here.
  *
@@ -23,6 +21,6 @@ public class AlbumDirectory {
 
     @Override
     public String toString() {
-        return file.getAbsolutePath().substring(LOCAL_MUSIC_BASE_DIRECTORY.length());
+        return file.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length() + 1);
     }
 }

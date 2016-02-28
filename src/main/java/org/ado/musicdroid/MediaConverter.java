@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.ado.musicdroid.AppConstants.EXPORT_DIRECTORY;
-import static org.ado.musicdroid.AppConstants.LOCAL_MUSIC_BASE_DIRECTORY;
 
 /**
  * Class description here.
@@ -104,7 +103,7 @@ public class MediaConverter {
     }
 
     private String getExportDirectory(File songFile) {
-        File exportFile = new File(EXPORT_DIRECTORY, songFile.getAbsolutePath().substring(LOCAL_MUSIC_BASE_DIRECTORY.length()));
+        File exportFile = new File(EXPORT_DIRECTORY, songFile.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length()));
         File exportDirectory = new File(FilenameUtils.getFullPath(exportFile.getAbsolutePath()));
         if (!exportDirectory.exists()) {
             try {
