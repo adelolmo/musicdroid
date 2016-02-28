@@ -17,9 +17,11 @@
         <version.plugin.jar>2.4</version.plugin.jar>
 
         <javafx.version>2.2</javafx.version>
+        <version.jadb>1.0</version.jadb>
 
         <exec.mainClass>org.ado.musicdroid.App</exec.mainClass>
         <project.build.scriptSourceDirectory>bin</project.build.scriptSourceDirectory>
+        <release.directory>${project.build.directory}/release</release.directory>
     </properties>
 
     <dependencies>
@@ -32,6 +34,11 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>se.vidstige</groupId>
+            <artifactId>jadb</artifactId>
+            <version>${version.jadb}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -70,6 +77,30 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>de.jutzig</groupId>
+                    <artifactId>github-release-plugin</artifactId>
+                    <version>1.1.1</version>
+                    <executions>
+                        <execution>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>release</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <serverId>github</serverId>
+                        <description>Description of your release</description>
+                        <releaseName>Music Droid ${project.version}</releaseName>
+                        <tag>musicdroid-${project.version}</tag>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -124,6 +155,7 @@
                     <descriptors>
                         <descriptor>src/main/assembly/assembly.xml</descriptor>
                     </descriptors>
+                    <outputDirectory>${release.directory}</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -137,4 +169,23 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>de.jutzig</groupId>
+                        <artifactId>github-release-plugin</artifactId>
+                        <configuration>
+                            <artifact>${release.directory}/${project.artifactId}-${project.version}-dist.tar.gz
+                            </artifact>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>
