@@ -8,7 +8,7 @@ Desktop application to move music albums to an android device
 Download the tar ball from 'releases' and extract it in your computer. e.g. in your home directory.
 
     $ cd /tmp
-    $ wget https://github.com/adelolmo/musicdroid/releases/download/musicdroid-1.0/musicdroid-1.0-dist.tar.gz
+    $ wget https://github.com/adelolmo/musicdroid/releases/download/v1.1/musicdroid-1.1-dist.tar.gz
     $ mkdir $HOME/musicdroid
     $ tar zxvf musicdroid-1.0-dist.tar.gz -C $HOME/musicdroid
     
