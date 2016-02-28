@@ -190,8 +190,8 @@
 
     <scm>
         <url>https://github.com/adelolmo/musicdroid</url>
-        <connection>scm:git:https://github.com/adelolmo/musicdroid .git</connection>
-        <developerConnection>scm:git:https://github.com/adelolmo/musicdroid .git</developerConnection>
+        <connection>scm:git:https://github.com/adelolmo/musicdroid.git</connection>
+        <developerConnection>scm:git:https://github.com/adelolmo/musicdroid.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
