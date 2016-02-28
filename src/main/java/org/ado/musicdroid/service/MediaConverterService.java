@@ -1,4 +1,4 @@
-package org.ado.musicdroid.exec;
+package org.ado.musicdroid.service;
 
 import com.avconv4java.core.AVCommand;
 import com.avconv4java.core.AVRootOptions;
@@ -53,35 +53,28 @@ public class MediaConverterService extends Service<Void> {
     @Override
     protected Task<Void> createTask() {
         return new Task<Void>() {
+            private final List<String> albumCoverProcessedList = new ArrayList<>();
+
             @Override
             protected Void call() throws Exception {
-                List<String> albumCoverProcessedList = new ArrayList<>();
-                for (File songFile : songFiles) {
-                    try {
-                        copyAlbumCoverIfNeeded(albumCoverProcessedList, songFile);
-                        jadbDevice.push(convertSong(songFile), new RemoteFile(getRemoteLocation(songFile)));
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                for (final File songFile : songFiles) {
+                    copyAlbumCoverIfNeeded(songFile);
+                    jadbDevice.push(convertSong(songFile), new RemoteFile(getRemoteLocation(songFile)));
                 }
                 return null;
             }
 
-            private void copyAlbumCoverIfNeeded(List<String> albumCoverProcessedList, File songFile) throws JadbException {
-                String albumName = getAlbumRelativePath(songFile);
+            private void copyAlbumCoverIfNeeded(File songFile) throws JadbException, IOException {
+                final String albumName = getAlbumRelativePath(songFile);
                 if (!albumCoverProcessedList.contains(albumName)) {
-                    InputStream inputStream = Mp3Utils.getAlbumCover(songFile);
+                    final InputStream inputStream = Mp3Utils.getAlbumCover(songFile);
                     if (inputStream != null) {
-                        String mimeType = Mp3Utils.getAlbumCoverMimeType(songFile);
-                        String fileExtension = MimeTypeMapping.getFileExtension(mimeType);
-                        try {
-                            File tempFile = File.createTempFile("cover", "image");
-                            FileUtils.copyInputStreamToFile(inputStream, tempFile);
-                            jadbDevice.push(tempFile, new RemoteFile(getAlbumCoverRemoteLocation(songFile, fileExtension)));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        File tempFile = File.createTempFile("cover", "image");
+                        FileUtils.copyInputStreamToFile(inputStream, tempFile);
+                        jadbDevice.push(tempFile,
+                                new RemoteFile(
+                                        getAlbumCoverRemoteLocation(songFile,
+                                                MimeTypeMapping.getFileExtension(Mp3Utils.getAlbumCoverMimeType(songFile)))));
                     }
                     albumCoverProcessedList.add(albumName);
                 }
@@ -107,7 +100,7 @@ public class MediaConverterService extends Service<Void> {
                         .setTimeout(10 * 60 * 60 * 1000L);
 
                 LOGGER.info("Convert song [" + songFile.getAbsolutePath() + "]");
-                ProcessInfo processInfo = command.run(options);
+                final ProcessInfo processInfo = command.run(options);
                 final String outputFile = options.getOutputFile();
 
                 LOGGER.info(String.format("Output file: %s, return code: %d", outputFile, processInfo.getStatusCode()));
