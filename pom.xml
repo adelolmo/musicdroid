@@ -95,7 +95,7 @@
                         <serverId>github</serverId>
                         <description>Description of your release</description>
                         <releaseName>Music Droid ${project.version}</releaseName>
-                        <tag>musicdroid-${project.version}</tag>
+                        <tag>v${project.version}</tag>
                     </configuration>
                 </plugin>
             </plugins>
