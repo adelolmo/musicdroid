@@ -87,10 +87,12 @@ public class MainController {
                 return devices.size();
             }
         });
+        if (!devicesComboBox.getItems().isEmpty()) {
+            devicesComboBox.setValue(devices.get(0));
+        }
         albumList = getLocalAlbums();
         artistListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         artistListView.setItems(getAlbumObservableList(null));
-
     }
 
     private ArrayList<File> getLocalAlbums() {
