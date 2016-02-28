@@ -20,12 +20,12 @@ Download the tar ball from 'releases' and extract it in your computer. e.g. in y
 
 ### Install JADB dependency
     $ cd /tmp
-    $ wget https://github.com/adelolmo/jadb/releases/download/jadb-1.0/jadb-1.0.jar 
+    $ wget https://github.com/adelolmo/jadb/releases/download/jadb-1.1/jadb-1.1.jar 
     $ mvn install:install-file \
-    -Dfile=/tmp/jadb-1.0.jar \
+    -Dfile=/tmp/jadb-1.1.jar \
     -DgroupId=se.vidstige \
     -DartifactId=jadb \
-    -Dversion=1.0 \
+    -Dversion=1.1 \
     -Dpackaging=jar
 
 ### Build Music Droid

@@ -6,7 +6,6 @@ import com.avconv4java.option.AVAudioOptions;
 import com.avconv4java.util.process.ProcessInfo;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import org.ado.musicdroid.AndroidAdbCommand;
 import org.ado.musicdroid.MimeTypeMapping;
 import org.ado.musicdroid.Mp3Utils;
 import org.apache.commons.io.FileUtils;
@@ -14,6 +13,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.vidstige.jadb.JadbDevice;
+import se.vidstige.jadb.JadbException;
+import se.vidstige.jadb.RemoteFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,12 +39,10 @@ public class MediaConverterService extends Service<Void> {
 
     private JadbDevice jadbDevice;
     private File[] songFiles;
-    private AndroidAdbCommand androidAdbCommand;
 
     public void setJadbDevice(final JadbDevice jadbDevice) {
         notNull(jadbDevice, "jadbDevice cannot be null");
         this.jadbDevice = jadbDevice;
-        androidAdbCommand = new AndroidAdbCommand();
     }
 
     public void setSongFiles(final Collection<File> songFiles) {
@@ -60,7 +59,8 @@ public class MediaConverterService extends Service<Void> {
                 for (File songFile : songFiles) {
                     try {
                         copyAlbumCoverIfNeeded(albumCoverProcessedList, songFile);
-                        androidAdbCommand.copyToRemote(convertSong(songFile), jadbDevice, getRemoteLocation(songFile));
+                        jadbDevice.push(convertSong(songFile), new RemoteFile(getRemoteLocation(songFile)));
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -68,7 +68,7 @@ public class MediaConverterService extends Service<Void> {
                 return null;
             }
 
-            private void copyAlbumCoverIfNeeded(List<String> albumCoverProcessedList, File songFile) {
+            private void copyAlbumCoverIfNeeded(List<String> albumCoverProcessedList, File songFile) throws JadbException {
                 String albumName = getAlbumRelativePath(songFile);
                 if (!albumCoverProcessedList.contains(albumName)) {
                     InputStream inputStream = Mp3Utils.getAlbumCover(songFile);
@@ -78,7 +78,7 @@ public class MediaConverterService extends Service<Void> {
                         try {
                             File tempFile = File.createTempFile("cover", "image");
                             FileUtils.copyInputStreamToFile(inputStream, tempFile);
-                            androidAdbCommand.copyToRemote(tempFile, jadbDevice, getAlbumCoverRemoteLocation(songFile, fileExtension));
+                            jadbDevice.push(tempFile, new RemoteFile(getAlbumCoverRemoteLocation(songFile, fileExtension)));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
