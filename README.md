@@ -1,6 +1,8 @@
 # MusicDroid
 Desktop application to move music albums to an android device
 
+<img src="musicdroid.png" width="75%"/>
+
 ## Install Application
 
 ### Install
