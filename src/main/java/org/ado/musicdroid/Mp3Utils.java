@@ -1,6 +1,21 @@
+/*
+ * Copyright (c) 2016 Andoni del Olmo
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.ado.musicdroid;
 
-import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
 
 import java.io.ByteArrayInputStream;
@@ -17,10 +32,9 @@ public class Mp3Utils {
 
     public static InputStream getAlbumCover(File file) {
         try {
-            Mp3File song = new Mp3File(file.getAbsolutePath());
+            final Mp3File song = new Mp3File(file.getAbsolutePath());
             if (song.hasId3v2Tag()) {
-                ID3v2 id3v2tag = song.getId3v2Tag();
-                return new ByteArrayInputStream(id3v2tag.getAlbumImage());
+                return new ByteArrayInputStream(song.getId3v2Tag().getAlbumImage());
             }
         } catch (Exception e) {
             return null;
@@ -30,10 +44,9 @@ public class Mp3Utils {
 
     public static String getAlbumCoverMimeType(File file) {
         try {
-            Mp3File song = new Mp3File(file.getAbsolutePath());
+            final Mp3File song = new Mp3File(file.getAbsolutePath());
             if (song.hasId3v2Tag()) {
-                ID3v2 id3v2tag = song.getId3v2Tag();
-                return id3v2tag.getAlbumImageMimeType();
+                return song.getId3v2Tag().getAlbumImageMimeType();
             }
         } catch (Exception e) {
             return null;
