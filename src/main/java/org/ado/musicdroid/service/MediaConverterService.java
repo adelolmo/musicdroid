@@ -85,7 +85,7 @@ public class MediaConverterService extends Service<Void> {
                 if (!albumCoverProcessedList.contains(albumName)) {
                     final InputStream inputStream = Mp3Utils.getAlbumCover(songFile);
                     if (inputStream != null) {
-                        File tempFile = File.createTempFile("cover", "image");
+                        final File tempFile = File.createTempFile("cover", "image");
                         FileUtils.copyInputStreamToFile(inputStream, tempFile);
                         jadbDevice.push(tempFile,
                                 new RemoteFile(
@@ -101,7 +101,7 @@ public class MediaConverterService extends Service<Void> {
             }
 
             private String getAlbumRelativePath(File songFile) {
-                String s = songFile.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length());
+                final String s = songFile.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length());
                 return s.substring(0, s.lastIndexOf("/") + 1);
             }
 
@@ -127,8 +127,8 @@ public class MediaConverterService extends Service<Void> {
             }
 
             private String getExportDirectory(File songFile) {
-                File exportFile = new File(EXPORT_DIRECTORY, songFile.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length()));
-                File exportDirectory = new File(FilenameUtils.getFullPath(exportFile.getAbsolutePath()));
+                final File exportFile = new File(EXPORT_DIRECTORY, songFile.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length()));
+                final File exportDirectory = new File(FilenameUtils.getFullPath(exportFile.getAbsolutePath()));
                 if (!exportDirectory.exists()) {
                     try {
                         FileUtils.forceMkdir(exportDirectory);

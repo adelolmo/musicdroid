@@ -38,7 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +77,7 @@ public class MainController {
     private List<File> albumList;
 
     @FXML
+    @SuppressWarnings("unused")
     private void initialize() throws Exception {
         mediaConverterService = new MediaConverterService();
         mediaConverterService.setOnSucceeded(event -> {
@@ -112,45 +113,36 @@ public class MainController {
     }
 
     private List<File> getLocalAlbums() {
-        Collection<File> files =
-                FileUtils.listFilesAndDirs(new File(System.getenv("MUSIC_HOME")),
-                        DirectoryFileFilter.DIRECTORY,
-                        TrueFileFilter.INSTANCE);
-        List<File> fileList = new ArrayList<>();
-        fileList.addAll(files);
-        fileList.remove(0);
-        return fileList;
+        return FileUtils.listFilesAndDirs(new File(System.getenv("MUSIC_HOME")),
+                DirectoryFileFilter.DIRECTORY,
+                TrueFileFilter.INSTANCE)
+                .stream()
+                .filter(file -> !file.getAbsolutePath().equals(System.getenv("MUSIC_HOME")))
+                .sorted((o1, o2) -> o1.getAbsolutePath()
+                        .compareTo(o2.getAbsolutePath()))
+                .collect(Collectors.toList());
     }
 
     private ObservableListBase<AlbumDirectory> getAlbumObservableList(String searchSequence) {
-
-
         return new ObservableListBase<AlbumDirectory>() {
 
             private List<AlbumDirectory> list = getAlbumDirectories();
 
             private List<AlbumDirectory> getAlbumDirectories() {
-                final List<AlbumDirectory> albumDirectories = new ArrayList<>();
                 if (StringUtils.isNotBlank(searchSequence)) {
-
-                    return getFilterdAlbumList();
-
+                    return getFilteredAlbumList();
                 } else {
-                    albumDirectories.addAll(albumList.stream().map(AlbumDirectory::new).collect(Collectors.toList()));
+                    return albumList.stream().map(AlbumDirectory::new).collect(Collectors.toList());
                 }
-                return albumDirectories;
             }
 
-            private List<AlbumDirectory> getFilterdAlbumList() {
-                final List<AlbumDirectory> albumDirectories =
-                        albumList.stream()
-                                .filter(file -> file.getAbsolutePath().toLowerCase().contains(searchSequence))
-                                .map(AlbumDirectory::new)
-                                .collect(Collectors.toList());
-                albumDirectories
-                        .sort((o1, o2) -> o1.getFile().getAbsolutePath()
-                                .compareTo(o2.getFile().getAbsolutePath()));
-                return albumDirectories;
+            private List<AlbumDirectory> getFilteredAlbumList() {
+                return albumList.stream()
+                        .filter(file -> file.getAbsolutePath().toLowerCase().contains(searchSequence))
+                        .map(AlbumDirectory::new)
+                        .sorted((o1, o2) -> o1.getFile().getAbsolutePath()
+                                .compareTo(o2.getFile().getAbsolutePath()))
+                        .collect(Collectors.toList());
             }
 
             @Override
@@ -171,20 +163,18 @@ public class MainController {
     }
 
     private List<JadbDevice> getJadbDevices() {
-        List<JadbDevice> deviceList = new ArrayList<>();
         try {
-            JadbConnection jadbConnection = new JadbConnection();
-            deviceList = jadbConnection.getDevices();
+            return new JadbConnection().getDevices();
         } catch (IOException | JadbException e) {
             LOGGER.warn(String.format("No Android device found. %s.", e.getMessage()));
         }
-        return deviceList;
+        return Collections.emptyList();
     }
 
     public void onMouseClicked() {
-        List<File> songList = getSelectedSongs();
+        final List<File> songList = getSelectedSongs();
         if (!songList.isEmpty()) {
-            InputStream albumCoverInputStream = Mp3Utils.getAlbumCover(songList.get(0));
+            final InputStream albumCoverInputStream = Mp3Utils.getAlbumCover(songList.get(0));
             if (albumCoverInputStream != null) {
                 albumCoverImageView.setImage(new Image(albumCoverInputStream));
             } else {
@@ -194,7 +184,7 @@ public class MainController {
     }
 
     public void onSearch() {
-        String searchSequence = textFieldSearch.getCharacters().toString();
+        final String searchSequence = textFieldSearch.getCharacters().toString();
         LOGGER.debug(searchSequence);
 //        List<File> fileList = getLocalAlbums();
         artistListView.setItems(getAlbumObservableList(searchSequence));
@@ -209,9 +199,8 @@ public class MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<File> songList = getSelectedSongs();
 
-        mediaConverterService.setSongFiles(songList);
+        mediaConverterService.setSongFiles(getSelectedSongs());
         mediaConverterService.setJadbDevice((JadbDevice) devicesComboBox.getSelectionModel().getSelectedItem());
         if (mediaConverterService.getState().equals(Worker.State.SUCCEEDED)) {
             mediaConverterService.restart();
@@ -222,11 +211,11 @@ public class MainController {
     }
 
     private List<File> getSelectedSongs() {
-        ObservableList selectedItems = artistListView.getSelectionModel().getSelectedItems();
+        final ObservableList selectedItems = artistListView.getSelectionModel().getSelectedItems();
+
         List<File> songList = new ArrayList<>();
         for (Object item : selectedItems) {
-            File albumDirectory = ((AlbumDirectory) item).getFile();
-            songList.addAll(FileUtils.listFiles(albumDirectory, TrueFileFilter.TRUE, TrueFileFilter.TRUE));
+            songList.addAll(FileUtils.listFiles(((AlbumDirectory) item).getFile(), TrueFileFilter.TRUE, TrueFileFilter.TRUE));
         }
         LOGGER.info("selected album(s) " + selectedItems);
         return songList;
