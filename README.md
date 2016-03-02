@@ -12,7 +12,7 @@ Download the tar ball from 'releases' and extract it in your computer. e.g. in y
     $ cd /tmp
     $ wget https://github.com/adelolmo/musicdroid/releases/download/v1.1/musicdroid-1.1-dist.tar.gz
     $ mkdir $HOME/musicdroid
-    $ tar zxvf musicdroid-1.0-dist.tar.gz -C $HOME/musicdroid
+    $ tar zxvf musicdroid-1.1-dist.tar.gz -C $HOME/musicdroid
     
 ### Launch
 
