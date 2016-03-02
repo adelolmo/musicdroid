@@ -6,7 +6,26 @@
     <artifactId>musicdroid</artifactId>
     <version>1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>musicdroid</name>
+
+    <name>Music Droid</name>
+    <description>Desktop application to move music albums to an android device.</description>
+    <url>https://github.com/adelolmo/musicdroid</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>adelolmo</id>
+            <name>Andoni del Olmo</name>
+            <email>andoni.delolmo@gmail.com</email>
+            <url>https://github.com/adelolmo</url>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
