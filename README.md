@@ -1,24 +1,23 @@
 # MusicDroid
-Desktop application to move music albums to an android device
+Desktop application to move music albums to an android device.
 
-<img src="musicdroid.png" width="75%"/>
+<img src="musicdroid.png"/>
 
-## Install Application
+## How to Install it
 
-### Install
+### Download
 
 Download the tar ball from 'releases' and extract it in your computer. e.g. in your home directory.
 
-    $ cd /tmp
     $ wget https://github.com/adelolmo/musicdroid/releases/download/v1.1/musicdroid-1.1-dist.tar.gz
     $ mkdir $HOME/musicdroid
     $ tar zxvf musicdroid-1.1-dist.tar.gz -C $HOME/musicdroid
     
-### Launch
+### Run it
 
     $ $HOME/musicdroid/startup.sh
 
-## Build
+## How to Build it
 
 ### Install JADB dependency
     $ cd /tmp
@@ -31,8 +30,6 @@ Download the tar ball from 'releases' and extract it in your computer. e.g. in y
     -Dpackaging=jar
 
 ### Build Music Droid
-    $ cd ~/dev
     $ git clone https://github.com/adelolmo/musicdroid.git
-    $ cd musicdroid
     $ mvn clean install
     
