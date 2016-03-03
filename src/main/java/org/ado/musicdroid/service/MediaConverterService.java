@@ -49,7 +49,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  * @author andoni
  * @since 06.09.2014
  */
-public class MediaConverterService extends Service<Void> {
+public class MediaConverterService extends Service<File> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(MediaConverterService.class);
 
@@ -67,13 +67,14 @@ public class MediaConverterService extends Service<Void> {
     }
 
     @Override
-    protected Task<Void> createTask() {
-        return new Task<Void>() {
+    protected Task<File> createTask() {
+        return new Task<File>() {
             private final List<String> albumCoverProcessedList = new ArrayList<>();
 
             @Override
-            protected Void call() throws Exception {
+            protected File call() throws Exception {
                 for (final File songFile : songFiles) {
+                    updateValue(songFile);
                     copyAlbumCoverIfNeeded(songFile);
                     jadbDevice.push(convertSong(songFile), new RemoteFile(getRemoteLocation(songFile)));
                 }

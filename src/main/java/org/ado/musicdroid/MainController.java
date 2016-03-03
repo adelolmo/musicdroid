@@ -16,13 +16,13 @@
 
 package org.ado.musicdroid;
 
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.StringConverter;
 import org.ado.musicdroid.service.MediaConverterService;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -60,10 +60,10 @@ public class MainController {
     private TextField textFieldSearch;
 
     @FXML
-    private ComboBox devicesComboBox;
+    private ComboBox<JadbDevice> devicesComboBox;
 
     @FXML
-    private ListView artistListView;
+    private ListView<AlbumDirectory> artistListView;
 
     @FXML
     private Button exportButton;
@@ -80,19 +80,23 @@ public class MainController {
     @SuppressWarnings("unused")
     private void initialize() throws Exception {
         mediaConverterService = new MediaConverterService();
+        mediaConverterService.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                conversionProcessLabel.setText(String.format("Processing \"%s\" ...", newValue.getName()));
+            }
+        });
         mediaConverterService.setOnSucceeded(event -> {
             conversionProcessLabel.setText("Conversion finished");
             exportButton.setDisable(false);
         });
-        mediaConverterService.setOnRunning(event -> conversionProcessLabel.setText("Converting songs..."));
         mediaConverterService.setOnFailed(event -> {
             conversionProcessLabel.setText("Conversion failed!");
             exportButton.setDisable(false);
             LOGGER.error(event.getSource().exceptionProperty().getValue().toString());
         });
 
-        List<JadbDevice> devices = getJadbDevices();
-        LOGGER.info("Devices [" + devices + "]");
+        final List<JadbDevice> devices = getJadbDevices();
+        LOGGER.info("Devices [{}]", devices);
         devicesComboBox.setItems(new ObservableListBase<JadbDevice>() {
             @Override
             public JadbDevice get(int index) {
@@ -102,6 +106,17 @@ public class MainController {
             @Override
             public int size() {
                 return devices.size();
+            }
+        });
+        devicesComboBox.setConverter(new StringConverter<JadbDevice>() {
+            @Override
+            public String toString(JadbDevice device) {
+                return device.getSerial();
+            }
+
+            @Override
+            public JadbDevice fromString(String string) {
+                return null;
             }
         });
         if (!devicesComboBox.getItems().isEmpty()) {
@@ -186,9 +201,7 @@ public class MainController {
     public void onSearch() {
         final String searchSequence = textFieldSearch.getCharacters().toString();
         LOGGER.debug(searchSequence);
-//        List<File> fileList = getLocalAlbums();
         artistListView.setItems(getAlbumObservableList(searchSequence));
-
     }
 
     public void onClick() {
@@ -197,11 +210,11 @@ public class MainController {
             FileUtils.deleteQuietly(EXPORT_DIRECTORY);
             FileUtils.forceMkdir(EXPORT_DIRECTORY);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(String.format("Unable to clear export directory %s", EXPORT_DIRECTORY), e);
         }
 
         mediaConverterService.setSongFiles(getSelectedSongs());
-        mediaConverterService.setJadbDevice((JadbDevice) devicesComboBox.getSelectionModel().getSelectedItem());
+        mediaConverterService.setJadbDevice(devicesComboBox.getSelectionModel().getSelectedItem());
         if (mediaConverterService.getState().equals(Worker.State.SUCCEEDED)) {
             mediaConverterService.restart();
         } else {
@@ -211,13 +224,15 @@ public class MainController {
     }
 
     private List<File> getSelectedSongs() {
-        final ObservableList selectedItems = artistListView.getSelectionModel().getSelectedItems();
-
-        List<File> songList = new ArrayList<>();
-        for (Object item : selectedItems) {
-            songList.addAll(FileUtils.listFiles(((AlbumDirectory) item).getFile(), TrueFileFilter.TRUE, TrueFileFilter.TRUE));
+        final List<File> songList = new ArrayList<>();
+        for (Object item : artistListView.getSelectionModel().getSelectedItems().stream()
+                .sorted((i1, i2) -> i1.getFile().getName().compareTo(i2.getFile().getName()))
+                .collect(Collectors.toList())) {
+            songList.addAll(FileUtils.listFiles(((AlbumDirectory) item).getFile(), TrueFileFilter.TRUE, TrueFileFilter.TRUE)
+                    .stream()
+                    .sorted((i1, i2) -> i1.getName().compareTo(i2.getName()))
+                    .collect(Collectors.toList()));
         }
-        LOGGER.info("selected album(s) " + selectedItems);
         return songList;
     }
 }
