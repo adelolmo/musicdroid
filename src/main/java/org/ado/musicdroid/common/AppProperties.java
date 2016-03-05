@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.ado.musicdroid;
+package org.ado.musicdroid.common;
 
 import java.io.IOException;
 import java.util.Properties;

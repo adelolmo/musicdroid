@@ -6,11 +6,47 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="517.0"
             prefWidth="866.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.ado.musicdroid.MainController">
+            fx:controller="org.ado.musicdroid.view.AppPresenter">
     <children>
-        <VBox layoutY="42.0">
+        <MenuBar prefHeight="29.0" prefWidth="866.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#settings" text="Settings..."/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="35.0">
             <children>
-                <SplitPane dividerPositions="0.6006944444444444" layoutY="42.0" prefHeight="439.0" prefWidth="866.0"
+                <Label layoutX="14.0" layoutY="19.0" text="Search:"/>
+                <TextField fx:id="textFieldSearch" layoutX="64.0" layoutY="14.0" onKeyReleased="#onSearch">
+                    <HBox.margin>
+                        <Insets left="2.0"/>
+                    </HBox.margin>
+                </TextField>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" layoutX="255.0" layoutY="35.0">
+            <children>
+                <Label layoutX="14.0" layoutY="14.0" text="Device:"/>
+                <ComboBox fx:id="devicesComboBox" layoutX="70.0" layoutY="9.0" prefHeight="25.0" prefWidth="186.0">
+                    <HBox.margin>
+                        <Insets left="2.0"/>
+                    </HBox.margin>
+                </ComboBox>
+            </children>
+        </HBox>
+        <Button fx:id="exportButton" layoutX="516.0" layoutY="35.0" mnemonicParsing="false" onAction="#onClick"
+                text="Export"/>
+        <VBox layoutY="68.0" prefHeight="453.0" prefWidth="866.0">
+            <children>
+                <SplitPane dividerPositions="0.6006944444444444" layoutY="42.0" prefHeight="431.0" prefWidth="866.0"
                            AnchorPane.bottomAnchor="36.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                            AnchorPane.topAnchor="42.0">
                     <items>
@@ -38,27 +74,5 @@
                 </Pane>
             </children>
         </VBox>
-        <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="8.0">
-            <children>
-                <Label layoutX="14.0" layoutY="19.0" text="Search:"/>
-                <TextField fx:id="textFieldSearch" layoutX="64.0" layoutY="14.0" onKeyReleased="#onSearch">
-                    <HBox.margin>
-                        <Insets left="2.0"/>
-                    </HBox.margin>
-                </TextField>
-            </children>
-        </HBox>
-        <HBox alignment="CENTER" layoutX="255.0" layoutY="8.0">
-            <children>
-                <Label layoutX="14.0" layoutY="14.0" text="Device:"/>
-                <ComboBox fx:id="devicesComboBox" layoutX="70.0" layoutY="9.0" prefHeight="25.0" prefWidth="186.0">
-                    <HBox.margin>
-                        <Insets left="2.0"/>
-                    </HBox.margin>
-                </ComboBox>
-            </children>
-        </HBox>
-        <Button fx:id="exportButton" layoutX="517.0" layoutY="8.0" mnemonicParsing="false" onAction="#onClick"
-                text="Export"/>
     </children>
 </AnchorPane>

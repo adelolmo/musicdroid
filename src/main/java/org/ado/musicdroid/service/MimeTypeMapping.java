@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.ado.musicdroid;
+package org.ado.musicdroid.service;
 
 import java.util.HashMap;
 import java.util.Map;

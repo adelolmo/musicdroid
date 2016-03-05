@@ -55,6 +55,11 @@
             <version>1.7.5</version>
         </dependency>
         <dependency>
+            <groupId>com.airhacks</groupId>
+            <artifactId>afterburner.fx</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+        <dependency>
             <groupId>se.vidstige</groupId>
             <artifactId>jadb</artifactId>
             <version>${version.jadb}</version>

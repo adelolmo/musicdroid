@@ -17,11 +17,10 @@
 package org.ado.musicdroid;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.apache.commons.lang3.StringUtils;
+import org.ado.musicdroid.view.AppPresenter;
+import org.ado.musicdroid.view.AppView;
 import se.vidstige.jadb.JadbException;
 
 import java.io.IOException;
@@ -29,19 +28,19 @@ import java.io.IOException;
 public class App extends Application {
 
     public static void main(String[] args) {
-        if (StringUtils.isEmpty(System.getenv("MUSIC_HOME"))) {
-            System.out.println("Missing MUSIC_HOME environment variable!");
-            System.exit(1);
-        }
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException, JadbException {
-        Parent root = FXMLLoader.load(getClass().getResource("fxml/MainTreeAndCover.fxml"));
-        Scene scene = new Scene(root);
+        final AppView appView = new AppView();
+        final Scene scene = new Scene(appView.getView());
+        final AppPresenter presenter = (AppPresenter) appView.getPresenter();
+        presenter.setStage(primaryStage);
         primaryStage.setTitle("Music Droid");
         primaryStage.setScene(scene);
+        primaryStage.setMaxHeight(Double.MAX_VALUE);
+        primaryStage.setMaxWidth(Double.MAX_VALUE);
         primaryStage.show();
     }
 }

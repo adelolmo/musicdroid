@@ -22,8 +22,7 @@ import com.avconv4java.option.AVAudioOptions;
 import com.avconv4java.util.process.ProcessInfo;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import org.ado.musicdroid.MimeTypeMapping;
-import org.ado.musicdroid.Mp3Utils;
+import org.ado.musicdroid.common.Mp3Utils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -39,8 +38,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static org.ado.musicdroid.AppConstants.ANDROID_MUSIC_BASE_DIRECTORY;
-import static org.ado.musicdroid.AppConstants.EXPORT_DIRECTORY;
+import static org.ado.musicdroid.common.AppConstants.ANDROID_MUSIC_BASE_DIRECTORY;
+import static org.ado.musicdroid.common.AppConstants.EXPORT_DIRECTORY;
 import static org.apache.commons.lang3.Validate.notNull;
 
 /**

@@ -1,3 +1,5 @@
+package org.ado.musicdroid.view;
+
 /*
  * Copyright (c) 2016 Andoni del Olmo
  *
@@ -14,16 +16,23 @@
  * limitations under the License.
  */
 
-package org.ado.musicdroid;
-
 import javafx.collections.ObservableListBase;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import org.ado.musicdroid.AlbumDirectory;
+import org.ado.musicdroid.common.AppConfiguration;
+import org.ado.musicdroid.common.Mp3Utils;
 import org.ado.musicdroid.service.MediaConverterService;
+import org.ado.musicdroid.view.settings.SettingsPresenter;
+import org.ado.musicdroid.view.settings.SettingsView;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -37,22 +46,23 @@ import se.vidstige.jadb.JadbException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import static org.ado.musicdroid.AppConstants.EXPORT_DIRECTORY;
+import static org.ado.musicdroid.common.AppConstants.EXPORT_DIRECTORY;
 
 /**
- * Class description here.
- *
- * @author andoni
- * @since 04.09.2014
+ * @author Andoni del Olmo
+ * @since 04.03.16
  */
-public class MainController {
+public class AppPresenter implements Initializable {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AppPresenter.class);
+    private Stage stage;
 
     private MediaConverterService mediaConverterService;
 
@@ -76,9 +86,8 @@ public class MainController {
 
     private List<File> albumList;
 
-    @FXML
-    @SuppressWarnings("unused")
-    private void initialize() throws Exception {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         mediaConverterService = new MediaConverterService();
         mediaConverterService.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -122,20 +131,44 @@ public class MainController {
         if (!devicesComboBox.getItems().isEmpty()) {
             devicesComboBox.setValue(devices.get(0));
         }
+        loadAlbumList();
+    }
+
+    private void loadAlbumList() {
         albumList = getLocalAlbums();
         artistListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         artistListView.setItems(getAlbumObservableList(null));
     }
 
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void settings() {
+        final Stage stage = new Stage();
+        final SettingsView settingsView = new SettingsView();
+        final SettingsPresenter presenter = (SettingsPresenter) settingsView.getPresenter();
+        presenter.setStage(stage, this::loadAlbumList);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(settingsView.getView()));
+        stage.setTitle("Settings");
+        stage.show();
+    }
+
     private List<File> getLocalAlbums() {
-        return FileUtils.listFilesAndDirs(new File(System.getenv("MUSIC_HOME")),
-                DirectoryFileFilter.DIRECTORY,
-                TrueFileFilter.INSTANCE)
-                .stream()
-                .filter(file -> !file.getAbsolutePath().equals(System.getenv("MUSIC_HOME")))
-                .sorted((o1, o2) -> o1.getAbsolutePath()
-                        .compareTo(o2.getAbsolutePath()))
-                .collect(Collectors.toList());
+        final String musicDirectory = AppConfiguration.getConfigurationProperty("music.dir");
+        if (StringUtils.isNotBlank(musicDirectory)) {
+            return FileUtils.listFilesAndDirs(new File(musicDirectory),
+                    DirectoryFileFilter.DIRECTORY,
+                    TrueFileFilter.INSTANCE)
+                    .stream()
+                    .filter(file -> !file.getAbsolutePath().equals(musicDirectory))
+                    .sorted((o1, o2) -> o1.getAbsolutePath()
+                            .compareTo(o2.getAbsolutePath()))
+                    .collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private ObservableListBase<AlbumDirectory> getAlbumObservableList(String searchSequence) {
