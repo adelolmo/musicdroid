@@ -21,7 +21,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.ado.musicdroid.view.AppPresenter;
 import org.ado.musicdroid.view.AppView;
-import se.vidstige.jadb.JadbException;
 
 import java.io.IOException;
 
@@ -32,7 +31,7 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException, JadbException {
+    public void start(Stage primaryStage) throws IOException {
         final AppView appView = new AppView();
         final Scene scene = new Scene(appView.getView());
         final AppPresenter presenter = (AppPresenter) appView.getPresenter();

@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>Music Droid</name>
-    <description>Desktop application to move music albums to an android device.</description>
+    <description>Application to move music albums to an android device.</description>
     <url>https://github.com/adelolmo/musicdroid</url>
 
     <licenses>
@@ -41,6 +41,7 @@
         <exec.mainClass>org.ado.musicdroid.App</exec.mainClass>
         <project.build.scriptSourceDirectory>bin</project.build.scriptSourceDirectory>
         <release.directory>${project.build.directory}/release</release.directory>
+        <deb.directory>${project.build.directory}/jfx/native</deb.directory>
     </properties>
 
     <dependencies>
@@ -101,6 +102,12 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${project.basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -140,9 +147,6 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
-                    <!--                    <descriptors>
-                                            <descriptor>src/main/assembly/jar-with-dependencies.xml</descriptor>
-                                        </descriptors>-->
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
@@ -153,10 +157,6 @@
                             <JavaFX-Application-Class>${exec.mainClass}</JavaFX-Application-Class>
                             <Main-Class>${exec.mainClass}</Main-Class>
                             <JavaFX-Version>${javafx.version}+</JavaFX-Version>
-                            <implementation-version>1.0</implementation-version>
-                            <!--                            <JavaFX-Class-Path>
-                            </JavaFX-Class-Path> -->
-                            <!-- The artifactId (name) of the jfxrt.jar ... see dependency system scope-->
                             <Class-Path>javafx-${javafx.version}.jar</Class-Path>
                         </manifestEntries>
                     </archive>
@@ -194,8 +194,14 @@
                         <groupId>de.jutzig</groupId>
                         <artifactId>github-release-plugin</artifactId>
                         <configuration>
-                            <artifact>${release.directory}/${project.artifactId}-${project.version}-dist.tar.gz
-                            </artifact>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${release.directory}</directory>
+                                    <includes>
+                                        <include>*.*</include>
+                                    </includes>
+                                </fileSet>
+                            </fileSets>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -212,6 +218,10 @@
                         <configuration>
                             <vendor>Andoni del Olmo</vendor>
                             <mainClass>${exec.mainClass}</mainClass>
+                            <appName>${project.artifactId}</appName>
+                            <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
+                            <nativeOutputDir>${release.directory}</nativeOutputDir>
+                            <additionalAppResources>${project.basedir}/src/main/deploy</additionalAppResources>
                         </configuration>
                         <executions>
                             <execution>

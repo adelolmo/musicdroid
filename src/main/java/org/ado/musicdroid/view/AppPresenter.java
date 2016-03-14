@@ -31,6 +31,8 @@ import org.ado.musicdroid.AlbumDirectory;
 import org.ado.musicdroid.common.AppConfiguration;
 import org.ado.musicdroid.common.Mp3Utils;
 import org.ado.musicdroid.service.MediaConverterService;
+import org.ado.musicdroid.view.about.AboutPresenter;
+import org.ado.musicdroid.view.about.AboutView;
 import org.ado.musicdroid.view.settings.SettingsPresenter;
 import org.ado.musicdroid.view.settings.SettingsView;
 import org.apache.commons.io.FileUtils;
@@ -151,6 +153,17 @@ public class AppPresenter implements Initializable {
         presenter.setStage(stage, this::loadAlbumList);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(settingsView.getView()));
+        stage.setTitle("Settings");
+        stage.show();
+    }
+
+    public void about() {
+        final Stage stage = new Stage();
+        final AboutView aboutView = new AboutView();
+        final AboutPresenter presenter = (AboutPresenter) aboutView.getPresenter();
+        presenter.setStage(stage);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(aboutView.getView()));
         stage.setTitle("Settings");
         stage.show();
     }
