@@ -19,7 +19,7 @@
 
     <files>
         <file>
-            <source>${project.basedir}/src/main/resources/org/ado/musicdroid/musicdroid.properties</source>
+            <source>${project.basedir}/src/main/resources/org/ado/musicdroid/common/musicdroid.properties</source>
             <filtered>true</filtered>
         </file>
     </files>
