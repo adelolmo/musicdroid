@@ -251,7 +251,6 @@ public class AppPresenter implements Initializable {
     }
 
     public void onClick() {
-//        Dialogs.showErrorDialog(, "Ooops, there was an error!", "Error Dialog", "title");
         try {
             FileUtils.deleteQuietly(EXPORT_DIRECTORY);
             FileUtils.forceMkdir(EXPORT_DIRECTORY);

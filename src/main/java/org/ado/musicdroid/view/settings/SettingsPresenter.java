@@ -67,7 +67,7 @@ public class SettingsPresenter implements Initializable {
         configureDirectoryChooser(fileChooser);
         final File file = fileChooser.showDialog(stage);
         if (file != null) {
-            System.out.println(file);
+            LOGGER.debug("Directory {}", file.getAbsolutePath());
             textFieldMusicDirectory.setText(file.getAbsolutePath());
         }
     }
