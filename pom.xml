@@ -4,7 +4,7 @@
 
     <groupId>org.ado</groupId>
     <artifactId>musicdroid</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Music Droid</name>
@@ -197,9 +197,10 @@
                             <fileSets>
                                 <fileSet>
                                     <directory>${release.directory}</directory>
-                                    <excludes>
-                                        <exclude>*.jar</exclude>
-                                    </excludes>
+                                    <includes>
+                                        <include>*.deb</include>
+                                        <include>*.tar.gz</include>
+                                    </includes>
                                 </fileSet>
                             </fileSets>
                         </configuration>
