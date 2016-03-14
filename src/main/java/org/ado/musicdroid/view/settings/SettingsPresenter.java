@@ -3,11 +3,13 @@ package org.ado.musicdroid.view.settings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.ado.musicdroid.common.AppConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -40,6 +42,7 @@ public class SettingsPresenter implements Initializable {
 
     private Stage stage;
     private SettingsEventListener listener;
+    private final DirectoryChooser fileChooser = new DirectoryChooser();
 
     public void setStage(Stage stage, SettingsEventListener listener) {
         this.stage = stage;
@@ -58,6 +61,20 @@ public class SettingsPresenter implements Initializable {
 
     public void close() {
         stage.close();
+    }
+
+    public void browseMusicDirectory() {
+        configureDirectoryChooser(fileChooser);
+        final File file = fileChooser.showDialog(stage);
+        if (file != null) {
+            System.out.println(file);
+            textFieldMusicDirectory.setText(file.getAbsolutePath());
+        }
+    }
+
+    private void configureDirectoryChooser(DirectoryChooser fileChooser) {
+        fileChooser.setTitle("Music Directory");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
     }
 
     public interface SettingsEventListener {
