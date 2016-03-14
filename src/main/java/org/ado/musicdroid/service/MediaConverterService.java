@@ -22,6 +22,7 @@ import com.avconv4java.option.AVAudioOptions;
 import com.avconv4java.util.process.ProcessInfo;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import org.ado.musicdroid.common.AppConfiguration;
 import org.ado.musicdroid.common.Mp3Utils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -43,7 +44,7 @@ import static org.ado.musicdroid.common.AppConstants.EXPORT_DIRECTORY;
 import static org.apache.commons.lang3.Validate.notNull;
 
 /**
- * Class description here.
+ * Service to convert and copy song files to an android device.
  *
  * @author andoni
  * @since 06.09.2014
@@ -101,7 +102,8 @@ public class MediaConverterService extends Service<File> {
             }
 
             private String getAlbumRelativePath(File songFile) {
-                final String s = songFile.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length());
+                final String s = songFile.getAbsolutePath()
+                        .substring(AppConfiguration.getConfigurationProperty("music.dir").length());
                 return s.substring(0, s.lastIndexOf("/") + 1);
             }
 
@@ -115,11 +117,11 @@ public class MediaConverterService extends Service<File> {
                         .setDebug(true)
                         .setTimeout(10 * 60 * 60 * 1000L);
 
-                LOGGER.info("Convert song [" + songFile.getAbsolutePath() + "]");
+                LOGGER.info("Convert song [{}]", songFile.getAbsolutePath());
                 final ProcessInfo processInfo = command.run(options);
                 final String outputFile = options.getOutputFile();
 
-                LOGGER.info(String.format("Output file: %s, return code: %d", outputFile, processInfo.getStatusCode()));
+                LOGGER.info("Output file: {}, return code: {}", outputFile, processInfo.getStatusCode());
                 if (processInfo.getStatusCode() != 0) {
                     LOGGER.error(processInfo.toString());
                 }
@@ -127,7 +129,9 @@ public class MediaConverterService extends Service<File> {
             }
 
             private String getExportDirectory(File songFile) {
-                final File exportFile = new File(EXPORT_DIRECTORY, songFile.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length()));
+                final File exportFile =
+                        new File(EXPORT_DIRECTORY,
+                                songFile.getAbsolutePath().substring(AppConfiguration.getConfigurationProperty("music.dir").length()));
                 final File exportDirectory = new File(FilenameUtils.getFullPath(exportFile.getAbsolutePath()));
                 if (!exportDirectory.exists()) {
                     try {
@@ -140,7 +144,8 @@ public class MediaConverterService extends Service<File> {
             }
 
             private String getRemoteLocation(File file) {
-                return ANDROID_MUSIC_BASE_DIRECTORY + file.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length());
+                return ANDROID_MUSIC_BASE_DIRECTORY
+                        + file.getAbsolutePath().substring(AppConfiguration.getConfigurationProperty("music.dir").length());
             }
         };
     }
