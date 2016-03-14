@@ -197,9 +197,9 @@
                             <fileSets>
                                 <fileSet>
                                     <directory>${release.directory}</directory>
-                                    <includes>
-                                        <include>*.*</include>
-                                    </includes>
+                                    <excludes>
+                                        <exclude>*.jar</exclude>
+                                    </excludes>
                                 </fileSet>
                             </fileSets>
                         </configuration>
