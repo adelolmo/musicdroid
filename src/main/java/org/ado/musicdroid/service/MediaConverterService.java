@@ -35,9 +35,11 @@ import se.vidstige.jadb.RemoteFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.ado.musicdroid.common.AppConstants.ANDROID_MUSIC_BASE_DIRECTORY;
 import static org.ado.musicdroid.common.AppConstants.EXPORT_DIRECTORY;
@@ -54,7 +56,7 @@ public class MediaConverterService extends Service<File> {
     private final Logger LOGGER = LoggerFactory.getLogger(MediaConverterService.class);
 
     private JadbDevice jadbDevice;
-    private File[] songFiles;
+    private List<File> songFiles;
 
     public void setJadbDevice(final JadbDevice jadbDevice) {
         notNull(jadbDevice, "jadbDevice cannot be null");
@@ -63,7 +65,17 @@ public class MediaConverterService extends Service<File> {
 
     public void setSongFiles(final Collection<File> songFiles) {
         notNull(songFiles, "songFiles cannot be null");
-        this.songFiles = songFiles.toArray(new File[songFiles.size()]);
+        this.songFiles = songFiles.stream()
+                .filter(this::isAudio)
+                .collect(Collectors.toList());
+    }
+
+    private boolean isAudio(File file) {
+        try {
+            return Files.probeContentType(file.toPath()).startsWith("audio");
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     @Override
