@@ -1,12 +1,10 @@
 package org.ado.musicdroid.common;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 /*
@@ -34,24 +32,10 @@ import java.util.Properties;
  */
 public class AppConfiguration {
 
-    public static final File APP_CONFIG_DIRECTORY = new File(FileUtils.getUserDirectory(), "musicdroid");
-    private static final File CONFIG = new File(APP_CONFIG_DIRECTORY, "musicdroid-config.properties");
+    private static final File APP_CONFIG_DIRECTORY = new File(FileUtils.getUserDirectory(), ".musicdroid");
+    private static final File CONFIG = new File(APP_CONFIG_DIRECTORY, "musicdroid.properties");
 
     private static Properties config;
-    private static Properties properties;
-
-    public static String getApplicationProperty(String name) {
-        if (properties == null) {
-            try {
-                properties = loadFileProperties(new File("biblio.properties"), false);
-            } catch (Exception e) {
-                // fallback
-                System.out.println("loading fallback properties");
-                properties = loadFileProperties(AppConfiguration.class.getResourceAsStream("biblio.properties"));
-            }
-        }
-        return properties.getProperty(name);
-    }
 
     public static void setConfigurationProperty(String property, String value) {
         init();
@@ -62,11 +46,6 @@ public class AppConfiguration {
     public static String getConfigurationProperty(String property) {
         init();
         return config.getProperty(property);
-    }
-
-    public static String getConfigurationProperty(String property, String defaultValue) {
-        final String value = getConfigurationProperty(property);
-        return StringUtils.isNotBlank(value) ? value : defaultValue;
     }
 
     private static void store() {
@@ -80,16 +59,6 @@ public class AppConfiguration {
     private static void init() {
         config = loadFileProperties(CONFIG, true);
         store();
-    }
-
-    private static Properties loadFileProperties(InputStream inputStream) {
-        final Properties prop = new Properties();
-        try {
-            prop.load(inputStream);
-        } catch (IOException e) {
-            throw new IllegalStateException("Cannot read application properties file", e);
-        }
-        return prop;
     }
 
     private static Properties loadFileProperties(File file, boolean createIfNotExist) {
