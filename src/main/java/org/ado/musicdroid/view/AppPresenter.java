@@ -132,6 +132,7 @@ public class AppPresenter implements Initializable {
         });
         if (!devicesComboBox.getItems().isEmpty()) {
             devicesComboBox.setValue(devices.get(0));
+            exportButton.setDisable(false);
         }
         loadAlbumList();
     }

@@ -42,8 +42,8 @@
                 </ComboBox>
             </children>
         </HBox>
-        <Button fx:id="exportButton" layoutX="516.0" layoutY="35.0" mnemonicParsing="false" onAction="#onClick"
-                text="Export"/>
+        <Button fx:id="exportButton" disable="true" layoutX="516.0" layoutY="35.0" mnemonicParsing="false"
+                onAction="#onClick" text="Export"/>
         <VBox layoutY="68.0" prefHeight="453.0" prefWidth="866.0">
             <children>
                 <SplitPane dividerPositions="0.6006944444444444" layoutY="42.0" prefHeight="431.0" prefWidth="866.0"
