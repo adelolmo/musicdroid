@@ -37,10 +37,10 @@
         <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="23.0" layoutY="18.0" pickOnBounds="true"
                    preserveRatio="true">
             <image>
-                <Image url="@../../icon.jpeg"/>
+                <Image url="@../../icon.png"/>
             </image>
             <viewport>
-                <Rectangle2D height="300.0" width="300.0"/>
+                <Rectangle2D height="512.0" width="512.0"/>
             </viewport>
         </ImageView>
         <Button layoutX="717.0" layoutY="327.0" mnemonicParsing="false" onAction="#close" text="Close"/>
