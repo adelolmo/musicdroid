@@ -16,6 +16,8 @@
 
 package org.ado.musicdroid;
 
+import org.ado.musicdroid.common.AppConfiguration;
+
 import java.io.File;
 
 /**
@@ -37,6 +39,6 @@ public class AlbumDirectory {
 
     @Override
     public String toString() {
-        return file.getAbsolutePath().substring(System.getenv("MUSIC_HOME").length() + 1);
+        return file.getAbsolutePath().substring(AppConfiguration.getConfigurationProperty("music.dir").length() + 1);
     }
 }
