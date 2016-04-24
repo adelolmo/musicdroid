@@ -165,7 +165,7 @@ public class AppPresenter implements Initializable {
         presenter.setStage(stage);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(aboutView.getView()));
-        stage.setTitle("Settings");
+        stage.setTitle("About");
         stage.show();
     }
 
