@@ -36,7 +36,7 @@
         <version.plugin.jar>2.4</version.plugin.jar>
 
         <javafx.version>2.2</javafx.version>
-        <version.jadb>1.1</version.jadb>
+        <version.jadb>1.0.0</version.jadb>
 
         <exec.mainClass>org.ado.musicdroid.App</exec.mainClass>
         <project.build.scriptSourceDirectory>bin</project.build.scriptSourceDirectory>

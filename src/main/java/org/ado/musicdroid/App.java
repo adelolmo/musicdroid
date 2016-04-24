@@ -18,6 +18,7 @@ package org.ado.musicdroid;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.ado.musicdroid.view.AppPresenter;
 import org.ado.musicdroid.view.AppView;
@@ -40,6 +41,7 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMaxHeight(Double.MAX_VALUE);
         primaryStage.setMaxWidth(Double.MAX_VALUE);
+        primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("icon.png")));
         primaryStage.show();
     }
 }
