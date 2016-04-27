@@ -219,7 +219,7 @@
                         <configuration>
                             <vendor>Andoni del Olmo</vendor>
                             <mainClass>${exec.mainClass}</mainClass>
-                            <appName>${project.artifactId}</appName>
+                            <appName>Music Droid</appName>
                             <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
                             <nativeOutputDir>${release.directory}</nativeOutputDir>
                             <additionalAppResources>${project.basedir}/src/main/deploy</additionalAppResources>
