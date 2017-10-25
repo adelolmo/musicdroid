@@ -14,8 +14,8 @@ Desktop application to move music albums to an android device.
 Download the latest version from https://github.com/adelolmo/musicdroid/releases/latest
 
     $ cd /tmp
-    $ wget https://github.com/adelolmo/musicdroid/releases/download/v1.3/musicdroid-1.3.deb
-    $ sudo dpkg -i picasa-crawler-1.3.deb
+    $ wget https://github.com/adelolmo/musicdroid/releases/download/v1.4/musicdroid-1.4.deb
+    $ sudo dpkg -i musicdroid-1.4.deb
     
 ### Install in other Systems
 
@@ -26,9 +26,9 @@ Download the latest version from https://github.com/adelolmo/musicdroid/releases
 Download the tar ball from 'releases' and extract it in your computer. e.g. in your home directory.
 
     $ cd $HOME
-    $ wget https://github.com/adelolmo/musicdroid/releases/download/v1.3/musicdroid-1.3-dist.tar.gz
+    $ wget https://github.com/adelolmo/musicdroid/releases/download/v1.4/musicdroid-1.4-dist.tar.gz
     $ mkdir $HOME/musicdroid
-    $ tar zxvf musicdroid-1.3-dist.tar.gz -C $HOME/musicdroid
+    $ tar zxvf musicdroid-1.4-dist.tar.gz -C $HOME/musicdroid
     
 ### Run
 
