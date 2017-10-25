@@ -200,8 +200,7 @@ public class AppPresenter implements Initializable {
                 return albumList.stream()
                         .filter(file -> file.getAbsolutePath().toLowerCase().contains(searchSequence))
                         .map(AlbumDirectory::new)
-                        .sorted((o1, o2) -> o1.getFile().getAbsolutePath()
-                                .compareTo(o2.getFile().getAbsolutePath()))
+                        .sorted(Comparator.comparing(o -> o.getFile().getAbsolutePath()))
                         .collect(Collectors.toList());
             }
 
@@ -270,11 +269,11 @@ public class AppPresenter implements Initializable {
     private List<File> getSelectedSongs() {
         final List<File> songList = new ArrayList<>();
         for (Object item : artistListView.getSelectionModel().getSelectedItems().stream()
-                .sorted((i1, i2) -> i1.getFile().getName().compareTo(i2.getFile().getName()))
+                .sorted(Comparator.comparing(i -> i.getFile().getName()))
                 .collect(Collectors.toList())) {
             songList.addAll(FileUtils.listFiles(((AlbumDirectory) item).getFile(), TrueFileFilter.TRUE, TrueFileFilter.TRUE)
                     .stream()
-                    .sorted((i1, i2) -> i1.getName().compareTo(i2.getName()))
+                    .sorted(Comparator.comparing(File::getName))
                     .collect(Collectors.toList()));
         }
         return songList;
