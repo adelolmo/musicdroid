@@ -61,9 +61,9 @@
             <version>1.6.3</version>
         </dependency>
         <dependency>
-            <groupId>se.vidstige</groupId>
+            <groupId>com.github.vidstige</groupId>
             <artifactId>jadb</artifactId>
-            <version>${version.jadb}</version>
+            <version>94ebf380d8</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -245,6 +245,13 @@
             </build>
         </profile>
     </profiles>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <scm>
         <url>https://github.com/adelolmo/musicdroid</url>

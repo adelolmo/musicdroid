@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 run(){
     echo "***************"
@@ -11,7 +11,11 @@ run(){
 	# set branch release version
 	echo "> Building v.$1 ..."
 	mvn versions:set -DnewVersion="$1" > /dev/null 2>&1
-	mvn clean install -Pdeb -Prelease > /dev/null 2>&1
+	mvn clean package > /dev/null 2>&1
+
+	echo "> Publishing package to debian repository ..."
+    includeb jessie target/releases/*.deb
+
 	git commit -a -m "release v.$1"
    	echo "> Pushing $1 branch ..."
     git push --set-upstream origin $1
@@ -24,17 +28,32 @@ run(){
 	git commit -a -m "prepare to develop v.$2"
 	echo "> Pushing origin/master ..."
 	git push origin master
-    git branch --set-upstream master origin/master
+    git branch --set-upstream-to origin/master
 
 	# cleanup
 	find -name "*.versionsBackup"| xargs -I file rm file
 }
 
 release_version=$(grep -oP '(?<=<version>).*(?=</version>)' pom.xml|sed -n "1p"|grep -oE "[0-9\.]+")
-current_mayor_version=$( echo $release_version | grep -Eo "(^[0-9]*)" )
-current_minor_version=$( echo $release_version | grep -Eo "([0-9]*$)" )
-next_minor_version=$(( current_minor_version + 1 ))
-run $release_version "$current_mayor_version.$next_minor_version-SNAPSHOT"
+mayor_version=$( echo $release_version | grep -Eo "(^[0-9]*)" )
+mid_version=$( echo $release_version | grep -Eo "(\.)[0-9]*(\.)" | grep -Eo "[0-9]*" )
+minor_version=$( echo $release_version | grep -Eo "([0-9]*$)" )
 
+case $1 in
+    mayor)
+        mayor_version=$(( mayor_version + 1 ))
+        mid_version=0
+        minor_version=0
+        ;;
+    mid)
+        mid_version=$(( mid_version + 1 ))
+        minor_version=0
+        ;;
+    minor)
+        ;;
+    *)
+        mid_version=$(( mid_version + 1 ))
+        minor_version=0
+esac
 
-
+run "$mayor_version.$mid_version.$minor_version" "$mayor_version.$mid_version.$(( minor_version + 1 ))-SNAPSHOT"

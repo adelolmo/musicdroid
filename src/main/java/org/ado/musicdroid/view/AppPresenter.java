@@ -49,10 +49,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.ado.musicdroid.common.AppConstants.EXPORT_DIRECTORY;
@@ -171,18 +168,19 @@ public class AppPresenter implements Initializable {
 
     private List<File> getLocalAlbums() {
         final String musicDirectory = AppConfiguration.getConfigurationProperty("music.dir");
-        if (StringUtils.isNotBlank(musicDirectory)) {
-            return FileUtils.listFilesAndDirs(new File(musicDirectory),
-                    DirectoryFileFilter.DIRECTORY,
-                    TrueFileFilter.INSTANCE)
-                    .stream()
-                    .filter(file -> !file.getAbsolutePath().equals(musicDirectory))
-                    .sorted((o1, o2) -> o1.getAbsolutePath()
-                            .compareTo(o2.getAbsolutePath()))
-                    .collect(Collectors.toList());
-        } else {
+
+        final File directory = new File(musicDirectory);
+        if (!directory.exists()) {
             return Collections.emptyList();
         }
+
+        return FileUtils.listFilesAndDirs(directory,
+                DirectoryFileFilter.DIRECTORY,
+                TrueFileFilter.INSTANCE)
+                .stream()
+                .filter(file -> !file.getAbsolutePath().equals(musicDirectory))
+                .sorted(Comparator.comparing(File::getAbsolutePath))
+                .collect(Collectors.toList());
     }
 
     private ObservableListBase<AlbumDirectory> getAlbumObservableList(String searchSequence) {
