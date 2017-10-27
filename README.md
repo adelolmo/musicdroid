@@ -1,52 +1,30 @@
 # MusicDroid
-Desktop application to move music albums to an android device.
+Copy your music albums to your Android device.
 
 <img src="musicdroid.png"/>
 
-## System requirements
+# How to Install
 
-- Java 8
+## Setup repository
+```
+wget -O - http://adelolmo.github.io/andoni.delolmo@gmail.com.gpg.key | sudo apt-key add -
+echo "deb http://adelolmo.github.io xenial main" | sudo tee /etc/apt/sources.list.d/adelolmo.list
+sudo apt-get update
+```
 
-## How to use it
+## Install package
+```
+sudo apt-get install musicdroid
+```
 
-### Install in Ubuntu/Debian
+# How to remove
+```
+sudo apt-get purge musicdroid
+```
 
-Download the latest version from https://github.com/adelolmo/musicdroid/releases/latest
+# How to Build it
 
-    $ cd /tmp
-    $ wget https://github.com/adelolmo/musicdroid/releases/download/v1.4/musicdroid-1.4.deb
-    $ sudo dpkg -i musicdroid-1.4.deb
-    
-### Install in other Systems
-
-Download the latest version from https://github.com/adelolmo/musicdroid/releases/latest
-
-### Download
-
-Download the tar ball from 'releases' and extract it in your computer. e.g. in your home directory.
-
-    $ cd $HOME
-    $ wget https://github.com/adelolmo/musicdroid/releases/download/v1.4/musicdroid-1.4-dist.tar.gz
-    $ mkdir $HOME/musicdroid
-    $ tar zxvf musicdroid-1.4-dist.tar.gz -C $HOME/musicdroid
-    
-### Run
-
-#### In Ubuntu/Debian
-
-Go the the menu "Applications -> Others -> musicdroid"
-
-Or execute /opt/musicdroid/musicdroid
-
-#### In other Systems
-        
-Go to the directory where musicdroid was extracted.
-
-    $ $HOME/musicdroid/startup.sh
-
-## How to Build it
-
-### Install JADB dependency
+## Install JADB dependency
     $ cd /tmp
     $ wget https://github.com/adelolmo/jadb/releases/download/jadb-1.1/jadb-1.1.jar 
     $ mvn install:install-file \
@@ -56,7 +34,6 @@ Go to the directory where musicdroid was extracted.
     -Dversion=1.1 \
     -Dpackaging=jar
 
-### Build Music Droid
+## Build Music Droid
     $ git clone https://github.com/adelolmo/musicdroid.git
-    $ mvn clean install
-    
+    $ mvn clean package
