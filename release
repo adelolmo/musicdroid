@@ -11,11 +11,7 @@ run(){
 	# set branch release version
 	echo "> Building v.$1 ..."
 	mvn versions:set -DnewVersion="$1" > /dev/null 2>&1
-	mvn clean package > /dev/null 2>&1
-
-	echo "> Publishing package to debian repository ..."
-    includeb jessie target/releases/*.deb
-
+	mvn clean install -Pdeb -Prelease -DskipTests > /dev/null 2>&1
 	git commit -a -m "release v.$1"
    	echo "> Pushing $1 branch ..."
     git push --set-upstream origin $1
@@ -38,6 +34,11 @@ release_version=$(grep -oP '(?<=<version>).*(?=</version>)' pom.xml|sed -n "1p"|
 mayor_version=$( echo $release_version | grep -Eo "(^[0-9]*)" )
 mid_version=$( echo $release_version | grep -Eo "(\.)[0-9]*(\.)" | grep -Eo "[0-9]*" )
 minor_version=$( echo $release_version | grep -Eo "([0-9]*$)" )
+
+if [ $release_version = 1.0.0 ]; then
+    run "1.0.0" "1.0.1-SNAPSHOT"
+    exit 0
+fi
 
 case $1 in
     mayor)
