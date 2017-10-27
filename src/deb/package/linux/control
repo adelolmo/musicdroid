@@ -1,0 +1,10 @@
+Package: musicdroid
+Version: ${project.version}
+Section: unknown
+Maintainer: Andoni del Olmo
+Priority: optional
+Architecture: amd64
+Depends: libav-tools
+Provides: musicdroid
+Description: Music Droid
+    Copy your music albums to your Android device.

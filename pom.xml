@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>Music Droid</name>
-    <description>Application to move music albums to an android device.</description>
+    <description>Copy your music albums to your Android device</description>
     <url>https://github.com/adelolmo/musicdroid</url>
 
     <licenses>
@@ -107,7 +107,13 @@
                 <filtering>true</filtering>
                 <directory>${project.basedir}/src/main/resources</directory>
             </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/deb</directory>
+                <targetPath>${project.build.outputDirectory}/deb</targetPath>
+            </resource>
         </resources>
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -215,14 +221,22 @@
                     <plugin>
                         <groupId>com.zenjava</groupId>
                         <artifactId>javafx-maven-plugin</artifactId>
-                        <version>8.1.4</version>
+                        <version>8.7.0</version>
                         <configuration>
                             <vendor>Andoni del Olmo</vendor>
                             <mainClass>${exec.mainClass}</mainClass>
-                            <appName>Music Droid</appName>
+                            <appName>${project.artifactId}</appName>
+                            <verbose>true</verbose>
+                            <bundler>deb</bundler>
                             <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
                             <nativeOutputDir>${release.directory}</nativeOutputDir>
-                            <additionalAppResources>${project.basedir}/src/main/deploy</additionalAppResources>
+                            <bundleArguments>
+                                <licenseFile>License</licenseFile>
+                            </bundleArguments>
+                            <needMenu>true</needMenu>
+
+                            <deployDir>${project.build.outputDirectory}/deb</deployDir>
+                            <additionalAppResources>${project.build.outputDirectory}/deb</additionalAppResources>
                         </configuration>
                         <executions>
                             <execution>

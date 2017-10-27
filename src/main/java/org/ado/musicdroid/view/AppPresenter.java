@@ -233,11 +233,10 @@ public class AppPresenter implements Initializable {
     public void onMouseClicked() {
         final List<File> songList = getSelectedSongs();
         if (!songList.isEmpty()) {
+            albumCoverImageView.setImage(null);
             final InputStream albumCoverInputStream = Mp3Utils.getAlbumCover(songList.get(0));
             if (albumCoverInputStream != null) {
                 albumCoverImageView.setImage(new Image(albumCoverInputStream));
-            } else {
-                albumCoverImageView.setImage(null);
             }
         }
     }
