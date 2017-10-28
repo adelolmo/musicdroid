@@ -1,8 +1,8 @@
 [Desktop Entry]
 Name=MusicDroid
-Comment=MusicDroid
-Exec=/opt/MusicDroid/MusicDroid
-Icon=/opt/MusicDroid/MusicDroid.png
+Comment=Music Droid
+Exec=/opt/musicdroid/musicdroid
+Icon=/opt/musicdroid/musicdroid.png
 Terminal=false
 Type=Application
 Categories=AudioVideo;AudioVideoEditing;
