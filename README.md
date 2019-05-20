@@ -6,20 +6,17 @@ Copy your music albums to your Android device.
 # How to Install
 
 ## Setup repository
-```
-wget -O - http://adelolmo.github.io/andoni.delolmo@gmail.com.gpg.key | sudo apt-key add -
-echo "deb http://adelolmo.github.io xenial main" | sudo tee /etc/apt/sources.list.d/adelolmo.list
-sudo apt-get update
-```
+
+Follow the instructions [here](https://adelolmo.github.io).
 
 ## Install package
 ```
-sudo apt-get install musicdroid
+# apt-get install musicdroid
 ```
 
 # How to remove
 ```
-sudo apt-get purge musicdroid
+# apt-get purge musicdroid
 ```
 
 # How to Build it
